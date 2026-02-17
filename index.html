@@ -1,41 +1,26 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Workflow Login</title>
-</head>
-<body>
-  <h2>Login</h2>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <input type="email" id="email" placeholder="Email" />
-  <br><br>
-  <input type="password" id="password" placeholder="Password" />
-  <br><br>
-  <button onclick="login()">Login</button>
+<script>
+  const { createClient } = supabase;
 
-  <p id="message"></p>
+  const client = createClient(
+    "https://aroqbihucjasmjnqmjbt.supabase.co",
+    "sb_publishable_QpujYYTvCZoXzx0bnoyt_w_fmfD_Y8e"
+  );
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    const supabase = window.supabase.createClient(
-      "https://aroqbihucjasmjnqmjbt.supabase.co",
-      "sb_publishable_QpujYYTvCZoXzx0bnoyt_w_fmfD_Y8e"
-    );
+  async function login() {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
 
-    async function login() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+    const { data, error } = await client.auth.signInWithPassword({
+      email: email,
+      password: password
+    });
 
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: email,
-        password: password
-      });
-
-      if (error) {
-        document.getElementById("message").innerText = "Login gagal";
-      } else {
-        document.getElementById("message").innerText = "Login berhasil";
-      }
+    if (error) {
+      alert("Login gagal: " + error.message);
+    } else {
+      alert("Login berhasil");
     }
-  </script>
-</body>
-</html>
+  }
+</script>
